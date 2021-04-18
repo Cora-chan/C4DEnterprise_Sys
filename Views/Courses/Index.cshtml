@@ -1,0 +1,124 @@
+﻿@model IEnumerable<C4DEnterpriseSys_ver1.Models.Course>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Course</h2>
+@using (Html.BeginForm("AddNewCourse", "Courses"))
+{
+    <div>
+        <button type="submit" class="btn btn-primary">
+            New
+        </button>
+    </div>
+}
+<table id="courses" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Year</th>
+            <th>Semester</th>
+            <th>Genre</th>
+            <th>ClassType</th>
+            <th>Duration</th>
+            <th>Times</th>
+            <th>Hours</th>
+            <th>Room</th>
+            <th>Level</th>
+            <th>DayofWeek</th>
+            <th>BeginDate</th>
+            <th>EndDate</th>
+            <th>BeginTime</th>
+            <th>EndTime</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+     
+    </tbody>
+</table>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+           var table= $("#courses").DataTable({
+                ajax: {
+                    url: "/api/courses",
+                    dataSrc:""
+                },
+                columns: [
+                    {
+                        data: "name",
+                        render: function (data, type, course) {
+                            return "<a href='/courses/edit/" + course.id + "'>" + course.name + "</a>"
+                        }
+                    },
+                    {
+                        data:"year"
+                    },
+                    {
+                        data: "semester.name"
+                    },
+                    {
+                        data: "genre.name"
+                    },
+                    {
+                        data: "cType.name"
+                    },
+                    {
+                        data: "classDuration"
+                    },
+                    {
+                        data: "times"
+                    },
+                    {
+                        data: "hour"
+                    },
+                    {
+                        data: "room.name"
+                    },
+                    {
+                        data: "level.name"
+                    },
+                    {
+                        data: "dayInWeek.name"
+                    },
+                    {
+                        data: "beginDate"
+                    },
+                    {
+                        data: "endDate"
+                    },
+                    {
+                        data: "beginTime"
+                    },
+                    {
+                        data: "endTime"
+                    },
+                    {
+                        data: "id",
+                        render: function (data) {
+                            return "<button class='btn-link js-delete' data-course-id=" + data + "> Delete</button>";
+                        }
+                    }
+                ]
+            });
+
+            $("#courses").on("click", ".js-delete",function () {
+                var button = $(this);
+                if (confirm("are you sure")) {
+                    $.ajax({
+                        url: "/api/courses/" + button.attr("data-course-id"),
+                        method: "DELETE",
+                        success: function () {
+                            table.row(button.parents("tr")).remove().draw();
+                        }
+                    });
+                }
+            });
+        });
+        </script>
+    }
+
+

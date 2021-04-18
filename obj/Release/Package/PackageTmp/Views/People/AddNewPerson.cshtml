@@ -1,0 +1,72 @@
+﻿@model C4DEnterpriseSys_ver1.PersonFormViewModel
+@{
+    ViewBag.Title = "AddNewPerson";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Welcome!</h2>
+<h3>A very simple form</h3>
+
+@using (Html.BeginForm("Save", "People"))
+{
+    @Html.ValidationSummary(true, "please fix the errors.")
+<div class="form-group">
+    @Html.LabelFor(p => p.Person.Name)
+    @Html.TextBoxFor(p => p.Person.Name, new { @class = "form-control" })
+    @Html.ValidationMessageFor(p => p.Person.Name)
+</div>
+<div class="form-group">
+    @Html.LabelFor(p => p.Person.Email)
+    @Html.TextBoxFor(p => p.Person.Email, new { @class = "form-control" })
+    @Html.ValidationMessageFor(p => p.Person.Email)
+</div>
+<div class="form-group">
+    @Html.LabelFor(p => p.Person.Mobile)
+    @Html.TextBoxFor(p => p.Person.Mobile, new { @class = "form-control" })
+    @Html.ValidationMessageFor(p => p.Person.Mobile)
+</div>
+<div class="form-group">
+    @Html.LabelFor(p => p.Person.RoleId)
+    @Html.DropDownListFor(p => p.Person.RoleId, new SelectList(Model.Roles, "Id", "Name"), " ", new { @class = "form-control" })
+    @Html.ValidationMessageFor(p => p.Person.RoleId)
+</div>
+<div class="form-group">
+    @Html.LabelFor(p => p.Person.Birthdate)
+    @Html.TextBoxFor(p => p.Person.Birthdate, "{0:d MMM yyyy}", new { @class = "form-control" })
+    @Html.ValidationMessageFor(p => p.Person.Birthdate)
+</div>
+<div class="form-group">
+    @Html.LabelFor(p => p.Person.GenderId)
+    @Html.DropDownListFor(p => p.Person.GenderId, new SelectList(Model.Genders, "Id", "Name"), " ", new { @class = "form-control" })
+    @Html.ValidationMessageFor(p => p.Person.GenderId)
+</div>
+<div class="form-group">
+    @Html.LabelFor(p => p.Person.Address)
+    @Html.TextBoxFor(p => p.Person.Address, new { @class = "form-control" })
+    @Html.ValidationMessageFor(p => p.Person.Address)
+</div>
+<div class="form-group">
+    @Html.LabelFor(p => p.Person.PostalCode)
+    @Html.TextBoxFor(p => p.Person.PostalCode, new { @class = "form-control" })
+    @Html.ValidationMessageFor(p => p.Person.PostalCode)
+</div>
+<div class="form-group">
+    @Html.LabelFor(p => p.Person.CourseId)
+    @Html.DropDownListFor(p => p.Person.CourseId, new SelectList(Model.Courses, "Id", "Name"), " ", new { @class = "form-control" })
+    @Html.ValidationMessageFor(p => p.Person.CourseId)
+</div>
+    <div class="checkbox">
+        <label>
+            @Html.CheckBoxFor(p => p.Person.IsPremium) Are you in Premium Class?
+        </label>
+    </div>
+    @Html.HiddenFor(p => p.Person.Id)
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary">
+        Save
+    </button>
+}
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

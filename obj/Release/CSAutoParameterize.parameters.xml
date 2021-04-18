@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="DefaultConnection-Web.config Connection String" description="DefaultConnection Connection String used in web.config by the application to access the database." defaultValue="Server=tcp:schoolproject2019.database.windows.net,1433;Initial Catalog=aspnet-C4DEnterpriseSys_ver1-20190305052928;Persist Security Info=False;User ID=yuek022;Password=Kyue1993!;MultipleActiveResultSets=False;TrustServerCertificate=False;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Yue\\Desktop\\Project2_signindone\ -\ finaldemo\\Project2_in_progress\\Project2\\C4DEnterpriseSys_ver1\\C4DEnterpriseSys_ver1\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
+  </parameter>
+</parameters>

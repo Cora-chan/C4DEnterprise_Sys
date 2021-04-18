@@ -1,0 +1,110 @@
+﻿@model IEnumerable<C4DEnterpriseSys_ver1.Models.Person>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>People</h2>
+
+@using (Html.BeginForm("AddNewPerson", "People"))
+{
+    <div>
+        <button type="submit" class="btn btn-primary">
+            New
+        </button>
+    </div>
+}
+
+<table id="people" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Course</th>
+            <th>Gender</th>
+            <th>Birthdate</th>
+            <th>Address</th>
+            <th>PostalCode</th>
+            <th>Email</th>
+            <th>Mobile</th>
+            <th>Premium</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+           var table = $("#people").DataTable({
+                ajax: {
+                    url: "/api/people",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "name",
+                        render: function (data, type, person) {
+                            return "<a href='/people/edit/" + person.id + "'>" + person.name + "</a>";
+                        }
+                    },
+                    {
+                        data: "role.name"
+                    },
+                    {
+                        data: "course.name"
+                    },
+                    {
+                        data: "gender.name"
+                    },
+                    {
+                        data: "birthdate"
+                    },
+                    {
+                        data: "address"
+                    },
+                    {
+                        data: "postalCode"
+                    },
+                    {
+                        data: "email"
+                    },
+                    {
+                        data: "mobile"
+                    },
+                    {
+                        data: "isPremium"
+                    },
+                    {
+                        data: "id",
+                        render: function (data) {
+                            return "<button class='btn-link js-delete' data-person-id=" + data + "> Delete</button>";
+                        }
+                    }
+                ]
+            }
+
+            );
+
+            $("#people").on("click", ".js-delete", function () {
+                var button = $(this);
+                if (confirm("Are you sure you want to delete?")) {
+                    $.ajax(
+                        {
+                            url: "/api/people/" + button.attr("data-person-id"),
+                            method: "DELETE",
+                            success: function () {
+                                table.row(button.parents("tr")).remove().draw();
+                            }
+                   });
+                }
+            });
+        });
+    </script>
+}
+

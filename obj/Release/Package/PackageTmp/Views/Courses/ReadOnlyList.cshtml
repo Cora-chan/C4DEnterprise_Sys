@@ -1,0 +1,86 @@
+﻿@model IEnumerable<C4DEnterpriseSys_ver1.Models.Course>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Course</h2>
+
+<table id="courses" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Year</th>
+            <th>Semester</th>
+            <th>ClassType</th>
+            <th>Duration(hour)</th>
+            <th>Room</th>
+            <th>DayofWeek</th>
+            <th>Date</th>
+            <th>BeginTime</th>
+            <th>EndTime</th>   
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#courses").DataTable({
+                ajax: {
+                    url: "/api/courses",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "name",   
+                    },
+                    {
+                        data: "year"
+                    },
+                    {
+                        data: "semester.name"
+                    },
+                    {
+                        data: "cType.name"
+                    },
+                    {
+                        data: "classDuration"
+                    },
+                    {
+                        data: "room.name"
+                    },
+                    {
+                        data: "dayInWeek.name"
+                    },
+                    {
+                        data: "beginDate"
+                    },
+                    {
+                        data: "beginTime"
+                    },
+                    {
+                        data: "endTime"
+                    },
+                    
+                ]
+            });
+
+            $("#courses").on("click", ".js-delete", function () {
+                var button = $(this);
+                if (confirm("are you sure")) {
+                    $.ajax({
+                        url: "/api/courses/" + button.attr("data-course-id"),
+                        method: "DELETE",
+                        success: function () {
+                            table.row(button.parents("tr")).remove().draw();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}
+
+

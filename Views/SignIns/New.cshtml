@@ -1,0 +1,114 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "New SignIn Form";
+}
+
+<h2>New SignIn Form </h2>
+@using (Html.BeginForm("Index", "SignIns"))
+{
+    <div>
+        <button type="submit" class="btn btn-primary">
+            All
+        </button>
+    </div>
+}
+
+<form id="newSignIn">
+    <div class="form-group">
+        <label>Person</label>
+        <div class="tt-container">
+            <input id="person" required type="text" value="" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Course</label>
+        <div class="tt-container">
+            <input id="course" type="text" value="" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 col-sm-4">
+            <ul id="courses" class="list-group"></ul>
+        </div>
+    </div>
+
+
+    <button class"btn btn-primary">Submit</button>
+</form>
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            var vm = {
+                courseIds: []
+            };
+            var people = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/api/people?query=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            });
+            //
+            $('#person').typeahead({
+                minLength: 3,
+                highlight: true
+            }, {
+                    name: 'people',
+                    display: 'name',
+                    source: people
+                }).on("typeahead:select", function (e, person) {
+                    vm.personId = person.id;
+                });
+
+
+            var courses = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/api/courses?query=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            });
+
+            $('#course').typeahead({
+                minLength: 3,
+                highlight: true
+            }, {
+                    name: 'courses',
+                    display: 'name',
+                    source: courses
+                }).on("typeahead:select", function (e, course) {
+                    $("#courses").append("<li class='list-group-item'>" + course.name + "</li>");
+
+                    $("#course").typeahead("val", "");
+
+                    vm.courseIds.push(course.id);
+                });
+
+            $("#newSignIn").submit(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: "/api/newSignIns",
+                    method: "post",
+                    data: vm
+                })
+                    .done(function () {
+                        toastr.success("SignIn successfully recorded.");
+                    })
+                    .fail(function () {
+                        toastr.error("Something unexptected happened.");
+                    });
+            });
+        });
+
+    </script>
+}
+
+
